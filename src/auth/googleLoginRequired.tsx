@@ -1,8 +1,8 @@
 import { useRef, useEffect, useMemo } from 'react';
 import { useLoadScript } from '../util/useLoadScript';
-import useLocalStorage from '../util/useLocalStorage';
+import { useLocalStorage } from 'react-use';
 
-import { GoogleTokens, exchangeCodeForToken } from './authApi';
+import { GoogleTokens, exchangeCodeForToken, refreshToken } from './authApi';
 import { GoogleAuthProvider } from './googleAuthProvider';
 declare global {
   interface Window {
@@ -10,8 +10,34 @@ declare global {
   }
 }
 
+const EXPIRY_BUFFER_MS = 5 * 60 * 1000; // 5 min
+const TOKEN_REFRESH_INTERVAL = 30 * 60 * 1000; // 30 min
+
 function GoogleLoginRequired({children, scope} : any) {
-  const [tokens, setTokens] = useLocalStorage<GoogleTokens | null>('tokens', null);
+  const [tokens, setTokens, clearTokens] = useLocalStorage<GoogleTokens>('tokens');
+
+  // Are our tokens about to expire?
+  if (tokens?.refresh_token != null && tokens?.expiry_date != null && Date.now() > tokens?.expiry_date - EXPIRY_BUFFER_MS) {
+    // Token refresh needed
+    console.log('Tokens are old, refreshing tokens');
+    refreshToken(tokens).then(result => setTokens(result)).catch(e => {
+      console.error('Error refreshing tokens', e);
+      clearTokens();
+    });
+  }
+
+  // When we have new tokens, refresh after a predefined period
+  useEffect(() => {
+    if (tokens != null) {
+      const timeoutHandle = setTimeout(() => {
+        refreshToken(tokens).then(result => setTokens(result)).catch(e => {
+          console.error('Error refreshing tokens', e);
+          clearTokens();
+        });
+      }, TOKEN_REFRESH_INTERVAL);
+      return () => clearTimeout(timeoutHandle);
+    };
+  }, [tokens]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Load GSI, setup, and store in GISClientRef
   const GISClientRef = useRef<any>();
@@ -30,11 +56,11 @@ function GoogleLoginRequired({children, scope} : any) {
               setTokens(data);
             } else {
               // Failed to get token, logged out
-              setTokens(null);
+              clearTokens();
             }
           } catch (e) {
             console.error(e);
-            setTokens(null);
+            clearTokens();
           }
         }
       });
@@ -47,7 +73,7 @@ function GoogleLoginRequired({children, scope} : any) {
   }
 
   const logout = () => {
-    setTokens(null);
+    clearTokens();
   }
 
   const providerValue = useMemo(() => ({

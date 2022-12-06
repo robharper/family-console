@@ -5,7 +5,7 @@ export interface GoogleTokens {
   id_token: string,
   refresh_token: string,
   scope: string,
-  token_type: string,
+  token_type: string
 }
 
 export interface GoogleCode {
@@ -38,6 +38,14 @@ export async function refreshToken(tokens: GoogleTokens): Promise<GoogleTokens> 
     body: JSON.stringify(tokens)
   });
 
-  return await response.json();
+  if (response.ok) {
+    const newTokens = await response.json();
+    return {
+      ...tokens,
+      ...newTokens
+    }
+  } else {
+    throw Error('Failed to refresh tokens');
+  }
 }
 
