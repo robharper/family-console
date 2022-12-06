@@ -65,7 +65,7 @@ function GoogleLoginRequired({children, scope} : any) {
         }
       });
     }
-  }, [scope, gisStatus, setTokens]);
+  }, [scope, gisStatus]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Function for initiating login via GIS
   const login = () => {
@@ -90,12 +90,15 @@ function GoogleLoginRequired({children, scope} : any) {
     return (<h1>Cannot load Google GIS library</h1>);
   }
   if (tokens == null) {
-    return (<button onClick={login}>Login</button>);
+    return (
+      <div className="grid h-screen place-items-center ">
+        <button onClick={login} className="bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Login</button>
+      </div>
+    );
   }
 
   return (
     <GoogleAuthProvider.Provider value={providerValue}>
-      <button onClick={logout}>Logout</button>
       {children}
     </GoogleAuthProvider.Provider>
   );

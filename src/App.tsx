@@ -1,17 +1,13 @@
-import {useEffect} from 'react';
 import GoogleLoginRequired from './auth/googleLoginRequired';
-import './App.scss';
-import Calendar from './Calendar';
+import Calendar from './views/Calendar';
+import Header from './components/Header';
+
+import './App.css';
 
 function App() {
-
-  useEffect(() => {
-    console.log('App Mount');
-  }, []);
-
   return (
     <GoogleLoginRequired scope="email https://www.googleapis.com/auth/calendar.readonly">
-      <h1>Content</h1>
+      <Header></Header>
       <Calendar></Calendar>
     </GoogleLoginRequired>
   );

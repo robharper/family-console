@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { useGoogleQuery } from './auth/googleAuthProvider';
+import { useGoogleQuery } from '../auth/googleAuthProvider';
+import Loading from '../components/Loading';
 
 interface CalendarEvent {
   id: string
@@ -12,24 +12,22 @@ interface CalendarData {
   items: CalendarEvent[]
 }
 
+const params = {
+  'timeMin': (new Date()).toISOString(),
+  'maxResults': '10'
+};
+
 function Calendar() {
-  const { value, error, loading, retry } = useGoogleQuery<CalendarData>({
+  const { value, loading, retry } = useGoogleQuery<CalendarData>({
     url: 'https://www.googleapis.com/calendar/v3/calendars/primary/events',
+    params
   });
 
-  // useEffect(() => {
-  //   console.log('Calendar Mount');
-  //   run();
-  // }, []);
-
-  const refetch = () => {
-    try {
-      retry();
-    } catch (e) {
-      console.error(e);
-    }
-    console.log('done!');
-  };
+  if (loading) {
+    return (
+      <Loading/>
+    );
+  }
 
   const renderData = value?.items.map((item) => {
     return (
@@ -40,8 +38,9 @@ function Calendar() {
   });
 
   return (
-    <div>Calendar: {loading ? 'loading' : 'done'}
-      <button onClick={refetch}>Again!</button>
+    <div>
+      <h1>Calendar</h1>
+      <button onClick={retry} className="bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Again!</button>
       <ul>
         {renderData}
       </ul>
@@ -50,3 +49,4 @@ function Calendar() {
 }
 
 export default Calendar;
+

@@ -24,7 +24,8 @@ function useGoogleAuth(): GoogleAuth {
 
 export interface GoogleQueryParams {
   url: string,
-  headers?: Record<string, string>
+  headers?: Record<string, string>,
+  params?: Record<string, string>
 }
 
 /**
@@ -32,7 +33,7 @@ export interface GoogleQueryParams {
  * @param {url} The URL to request
  * @returns Promise<data>
  */
-function useGoogleQuery<T>({url, headers}: GoogleQueryParams) {
+function useGoogleQuery<T>({url, headers, params}: GoogleQueryParams) {
   const { tokens } = useGoogleAuth();
   if (tokens == null) {
     throw new Error('useGoogleQuery called without active google auth tokens in place. Ensure this component is wrapped in a GoogleAuthProvider with non-null tokens');
@@ -41,6 +42,10 @@ function useGoogleQuery<T>({url, headers}: GoogleQueryParams) {
   const authdHeaders = Object.assign({}, headers, {
     Authorization: `Bearer ${tokens.access_token}`
   });
+
+  if (params != null) {
+    url = `${url}?${new URLSearchParams(params)}`;
+  }
 
   const {loading, error, value, retry} = useAsyncRetry<T>(async () => {
     const response = await fetch(url, {
