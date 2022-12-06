@@ -33,6 +33,21 @@ async function exchangeCodeForToken({code}) {
   }
 }
 
+async function refreshToken({refresh_token}) {
+  try {
+    const response = await oauthClient().refreshToken(refresh_token);
+    if (response.res?.status === 200) {
+      return response.tokens;
+    } else {
+      console.error('Non 200 response from exchange', response);
+      throw new Error('Unable to exchange code for tokens');
+    }
+  } catch (e) {
+    console.error('Exceptions parsing response from exchange', e);
+  }
+}
+
 module.exports = {
-  exchangeCodeForToken
+  exchangeCodeForToken,
+  refreshToken
 };
