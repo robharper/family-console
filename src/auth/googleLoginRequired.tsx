@@ -13,7 +13,12 @@ declare global {
 const EXPIRY_BUFFER_MS = 5 * 60 * 1000; // 5 min
 const TOKEN_REFRESH_INTERVAL = 30 * 60 * 1000; // 30 min
 
-function GoogleLoginRequired({children, scope} : any) {
+interface GoogleLoginRequiredParams {
+  children: JSX.Element | JSX.Element[];
+  scope: string;
+}
+
+function GoogleLoginRequired({children, scope} : GoogleLoginRequiredParams) {
   const [tokens, setTokens, clearTokens] = useLocalStorage<GoogleTokens>('tokens');
 
   // Are our tokens about to expire?
