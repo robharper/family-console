@@ -23,9 +23,11 @@ function useGoogleAuth(): GoogleAuth {
 
 
 export interface GoogleQueryParams {
-  url: string,
-  headers?: Record<string, string>,
-  params?: Record<string, string>
+  url: string;
+  method?: string;
+  headers?: Record<string, string>;
+  params?: Record<string, string>;
+  body?: string
 }
 
 /**
@@ -33,7 +35,7 @@ export interface GoogleQueryParams {
  * @param {url} The URL to request
  * @returns Promise<data>
  */
-function useGoogleQuery<T>({url, headers, params}: GoogleQueryParams) {
+function useGoogleQuery<T>({url, method = 'GET', headers, params, body = undefined}: GoogleQueryParams) {
   const { tokens } = useGoogleAuth();
   if (tokens == null) {
     throw new Error('useGoogleQuery called without active google auth tokens in place. Ensure this component is wrapped in a GoogleAuthProvider with non-null tokens');
@@ -49,7 +51,9 @@ function useGoogleQuery<T>({url, headers, params}: GoogleQueryParams) {
 
   const {loading, error, value, retry} = useAsyncRetry<T>(async () => {
     const response = await fetch(url, {
-      headers: authdHeaders
+      method,
+      headers: authdHeaders,
+      body
     });
     const result = await response.json();
     return result
@@ -58,9 +62,17 @@ function useGoogleQuery<T>({url, headers, params}: GoogleQueryParams) {
   return {loading, error, value, retry};
 }
 
+function toGoogleDate(date: Date) {
+  return {
+    year: date.getFullYear(),
+    month: date.getMonth(),
+    day: date.getDate()
+  };
+}
 
 export {
   GoogleAuthProvider,
   useGoogleAuth,
-  useGoogleQuery
-}
+  useGoogleQuery,
+  toGoogleDate
+};

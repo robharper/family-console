@@ -22,7 +22,10 @@ function Calendar() {
   const calendarRequestParams = useMemo(() => (
     {
       'timeMin': today.toISOString(),
-      'maxResults': '10'
+      'timeMax': new Date(today.getFullYear(), today.getMonth(), today.getDate(), 11, 59, 59).toISOString(),
+      'maxResults': '10',
+      'orderBy': 'startTime',
+      'singleEvents': 'true'
     }
   ), [today]);
 
@@ -37,13 +40,18 @@ function Calendar() {
     );
   }
 
-  const renderData = value?.items.map((item) => {
-    return (
-      <li key={item.id}>
-        {item.summary} - {item.start.dateTime ?? item.start.date}
-      </li>
-    )
-  });
+  let renderData;
+  if (value?.items == null || value?.items?.length > 0) {
+    renderData = value?.items.map((item) => {
+      return (
+        <li key={item.id}>
+          {item.summary} - {item.start.dateTime ?? item.start.date}
+        </li>
+      )
+    });
+  } else {
+    renderData = <div>No events today</div>;
+  }
 
   return (
     <div className="px-2 py-2">
