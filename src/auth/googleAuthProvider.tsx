@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
-import { GoogleTokens } from './authApi';
 import { useAsyncRetry } from 'react-use';
+import { GoogleTokens } from '../google/types';
 interface GoogleAuth {
   tokens: GoogleTokens | undefined;
   setTokens: (value: GoogleTokens) => void;
@@ -62,17 +62,8 @@ function useGoogleQuery<T>({url, method = 'GET', headers, params, body = undefin
   return {loading, error, value, retry};
 }
 
-function toGoogleDate(date: Date) {
-  return {
-    year: date.getFullYear(),
-    month: date.getMonth(),
-    day: date.getDate()
-  };
-}
-
 export {
   GoogleAuthProvider,
   useGoogleAuth,
-  useGoogleQuery,
-  toGoogleDate
+  useGoogleQuery
 };

@@ -3,18 +3,8 @@ import ArrowPathIcon from '@heroicons/react/24/solid/ArrowPathIcon';
 import { useGoogleQuery } from '../auth/googleAuthProvider';
 import Loading from './Loading';
 import { useToday } from '../providers/todayProvider';
+import { CalendarData } from '../google/types';
 
-interface CalendarEvent {
-  id: string
-  summary: string
-  start: {
-    date?: string
-    dateTime?: string
-  }
-}
-interface CalendarData {
-  items: CalendarEvent[]
-}
 
 function Calendar() {
   const today = useToday();

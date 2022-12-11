@@ -2,8 +2,9 @@ import { useRef, useEffect, useMemo } from 'react';
 import { useLoadScript } from '../util/useLoadScript';
 import { useLocalStorage } from 'react-use';
 
-import { GoogleTokens, exchangeCodeForToken, refreshToken } from './authApi';
+import { exchangeCodeForToken, refreshToken } from './authApi';
 import { GoogleAuthProvider } from './googleAuthProvider';
+import { GoogleTokens } from '../google/types';
 declare global {
   interface Window {
     google: any;
