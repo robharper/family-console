@@ -3,17 +3,32 @@ import Calendar from './components/Calendar';
 import Header from './components/Header';
 
 import './App.css';
-import { TodayProvider } from './providers/todayProvider';
+import { TodayProvider, useToday } from './providers/todayProvider';
 import Slideshow from './components/Slideshow';
+import { add, endOfWeek } from 'date-fns/esm';
+import { startOfWeek } from 'date-fns';
 
 
 
 function App() {
+  const today = useToday();
+
+  const todayStart = today;
+  const todayEnd = add(today, {hours: 23, minutes: 59, seconds: 59});
+
+  const thisWeekStart = startOfWeek(today);
+  const thisWeekEnd = endOfWeek(today);
+
   return (
     <GoogleLoginRequired scope="email https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/photoslibrary.readonly">
       <TodayProvider>
         <Header></Header>
-        <Calendar></Calendar>
+        <Calendar timeMin={todayStart} timeMax={todayEnd} showDate={false}>
+          <h2>Today</h2>
+        </Calendar>
+        <Calendar timeMin={thisWeekStart} timeMax={thisWeekEnd} showDate={true}>
+          <h2>This week</h2>
+        </Calendar>
         <Slideshow></Slideshow>
       </TodayProvider>
     </GoogleLoginRequired>

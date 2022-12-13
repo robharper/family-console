@@ -21,7 +21,12 @@ export interface CalendarEvent {
     date?: string
     dateTime?: string
   }
+  end: {
+    date?: string
+    dateTime?: string
+  }
 }
+
 export interface CalendarData {
   items: CalendarEvent[]
 }
