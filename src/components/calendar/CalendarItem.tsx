@@ -1,5 +1,5 @@
 import { parseISO, format } from "date-fns";
-import { CalendarEvent } from "../google/types";
+import { CalendarEvent } from "../../google/types";
 
 
 export default function CalendarItem({event, showDate, currentTime} : {event: CalendarEvent, showDate: boolean, currentTime: Date}) {

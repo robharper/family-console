@@ -1,10 +1,10 @@
 import GoogleLoginRequired from './auth/googleLoginRequired';
-import Calendar from './components/Calendar';
+import Calendar from './components/calendar/Calendar';
 import Header from './components/Header';
 
 import './App.css';
 import { TodayProvider, useToday } from './providers/todayProvider';
-import Slideshow from './components/Slideshow';
+import GooglePhotosSlideshow from './components/photos/GooglePhotosSlideshow';
 import { add, endOfWeek } from 'date-fns/esm';
 import { startOfWeek } from 'date-fns';
 
@@ -29,7 +29,7 @@ function App() {
         <Calendar timeMin={thisWeekStart} timeMax={thisWeekEnd} showDate={true}>
           <h2>This week</h2>
         </Calendar>
-        <Slideshow></Slideshow>
+        <GooglePhotosSlideshow></GooglePhotosSlideshow>
       </TodayProvider>
     </GoogleLoginRequired>
   );

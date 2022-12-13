@@ -1,17 +1,16 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { add, sub } from 'date-fns'
-import { useGoogleQuery } from "../auth/googleAuthProvider";
-import { useToday } from "../providers/todayProvider";
-import Loading from "./Loading";
+import { useGoogleQuery } from "../../auth/googleAuthProvider";
+import { useToday } from "../../providers/todayProvider";
+import Loading from "../Loading";
 import { useTimeoutFn } from "react-use";
-import SlideshowImage from "./SlideshowImage";
-import { MediaSearchResult, toGoogleDate } from "../google/types";
-import { shuffle } from "../util/fns";
+import { MediaSearchResult, toGoogleDate } from "../../google/types";
+import { shuffle } from "../../util/fns";
+import Slideshow from "./Slideshow";
 
 const ONE_HOUR_MS = 60 * 60 * 1000;
-const TEN_SECONDS_MS = 10 * 1000;
 
-export default function Slideshow({photoDelay = TEN_SECONDS_MS} : {photoDelay?: number}) {
+export default function GooglePhotosSlideshow() {
   const today = useToday();
 
   const photosSearchRequest = useMemo(() => {
@@ -59,14 +58,6 @@ export default function Slideshow({photoDelay = TEN_SECONDS_MS} : {photoDelay?: 
   }, ONE_HOUR_MS);
 
   const randomPhotosList = useMemo(() => photosList?.mediaItems ? shuffle(photosList.mediaItems) : [], [photosList])
-  const [photoIndex, setPhotoIndex] = useState(0);
-
-  const [, , resetPhotoSelect] = useTimeoutFn(() => {
-    if (photosList != null) {
-      setPhotoIndex((photoIndex + 1) % randomPhotosList.length);
-    }
-    resetPhotoSelect();
-  }, photoDelay);
 
   if (loading) {
     return (
@@ -79,21 +70,7 @@ export default function Slideshow({photoDelay = TEN_SECONDS_MS} : {photoDelay?: 
     )
   }
 
-  const nextIndex = (photoIndex + 1) % randomPhotosList.length;
-
   return (
-    <div className="relative">
-      {photoIndex % 2 ? (
-        <>
-          <SlideshowImage mediaItem={photosList.mediaItems[photoIndex]} className="opacity-100 transition-opacity	duration-1000 absolute top-0 left-0"></SlideshowImage>
-          <SlideshowImage mediaItem={photosList.mediaItems[nextIndex]}  className="opacity-0 transition-opacity	duration-1000 absolute top-0 left-0"></SlideshowImage>
-        </>
-      ) : (
-        <>
-          <SlideshowImage mediaItem={photosList.mediaItems[nextIndex]} className="opacity-0 transition-opacity duration-1000 absolute top-0 left-0"></SlideshowImage>
-          <SlideshowImage mediaItem={photosList.mediaItems[photoIndex]}  className="opacity-100 transition-opacity duration-1000 absolute top-0 left-0"></SlideshowImage>
-        </>
-      )}
-    </div>
+    <Slideshow images={randomPhotosList}></Slideshow>
   );
 }

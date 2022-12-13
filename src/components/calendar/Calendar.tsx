@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import ArrowPathIcon from '@heroicons/react/24/solid/ArrowPathIcon';
-import { useGoogleQuery } from '../auth/googleAuthProvider';
-import Loading from './Loading';
-import { CalendarData } from '../google/types';
+import { useGoogleQuery } from '../../auth/googleAuthProvider';
+import Loading from '../Loading';
+import { CalendarData } from '../../google/types';
 import CalendarItem from './CalendarItem';
 import { useInterval } from 'react-use';
 

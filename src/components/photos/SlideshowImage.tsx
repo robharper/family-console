@@ -1,4 +1,4 @@
-import { MediaItem } from "../google/types";
+import { MediaItem } from "../../google/types";
 
 
 export default function SlideshowImage({mediaItem, className} : {mediaItem: MediaItem, className: string}) {
