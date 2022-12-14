@@ -26,7 +26,7 @@ export default function CalendarItem({event, showDate, currentTime} : {event: Ca
   const isActive = startTime && endTime && currentTime >= startTime && currentTime < endTime;
   const isComplete = endTime && currentTime >= endTime;
 
-  const activeClasses = isActive ? 'bg-orange-50' : '';
+  const activeClasses = isActive ? 'bg-yellow-100' : '';
   const completeClasses = isComplete ? 'bg-slate-200 text-slate-500' : '';
   const upcomingClasses = !isActive && !isComplete ? 'bg-slate-100' : '';
   const classes = [activeClasses, completeClasses, upcomingClasses].join(' ');

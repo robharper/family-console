@@ -6,6 +6,7 @@ import './App.css';
 import { TodayProvider, useToday } from './providers/todayProvider';
 import GooglePhotosSlideshow from './components/photos/GooglePhotosSlideshow';
 import { add, endOfWeek } from 'date-fns/esm';
+import Notes from './components/Notes';
 
 
 
@@ -26,22 +27,24 @@ function App() {
             <Header />
           </div>
           <div className="flex-1 min-h-0 flex flex-row items-stretch h-full">
-              <div className="flex-1 overflow-auto">
-                <Calendar timeMin={todayStart} timeMax={todayEnd} showDate={false}>
-                  <h2 className="font-bold">Today</h2>
-                </Calendar>
-                <Calendar timeMin={thisWeekStart} timeMax={thisWeekEnd} showDate={true}>
-                  <h2 className="font-bold">This week</h2>
-                </Calendar>
+            <div className="flex-1 overflow-auto">
+              <Calendar timeMin={todayStart} timeMax={todayEnd} showDate={false}>
+                <h2 className="font-bold">Today</h2>
+              </Calendar>
+              <Calendar timeMin={thisWeekStart} timeMax={thisWeekEnd} showDate={true}>
+                <h2 className="font-bold">This week</h2>
+              </Calendar>
+            </div>
+            <div className="flex-1 flex flex-col">
+              <div className="flex-1 m-2 min-h-0">
+                <Notes>
+                  <h2 className="font-bold">Notes</h2>
+                </Notes>
               </div>
-              <div className="flex-1 flex flex-col">
-                <div className="flex-1 m-2">
-                  <p className="p-2 h-full rounded-xl bg-white">This will be a notepad</p>
-                </div>
-                <div className="flex-none">
-                  <GooglePhotosSlideshow />
-                </div>
+              <div className="flex-none">
+                <GooglePhotosSlideshow />
               </div>
+            </div>
           </div>
         </div>
       </TodayProvider>
