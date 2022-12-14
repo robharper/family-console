@@ -41,13 +41,16 @@ function Calendar({children, timeMin, timeMax, showDate} : {children?: JSX.Eleme
   }
 
   return (
-    <div className="px-2 py-2">
-      {children}
-      <button onClick={retry} className="ml-2 w-4 h-4">
-        <ArrowPathIcon/>
-      </button>
-      <ul>
-        {value?.items?.map(item => (<CalendarItem event={item} showDate={showDate} currentTime={currentTime}></CalendarItem>))}
+    <div className="p-2 m-2 bg-slate-300 rounded-xl">
+      <div className="p-2 mb-2 relative">
+        {children}
+        <button onClick={retry} className="absolute top-0 right-2 w-6 h-full">
+          <ArrowPathIcon/>
+        </button>
+      </div>
+
+      <ul className="mt-2">
+        {value?.items?.map(item => (<CalendarItem key={item.id} event={item} showDate={showDate} currentTime={currentTime}></CalendarItem>))}
       </ul>
       {value?.items == null || value?.items?.length === 0 ?
         <div>No events in period</div> : null
