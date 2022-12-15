@@ -5,10 +5,20 @@ import Loading from '../Loading';
 import { CalendarData } from '../../google/types';
 import CalendarItem from './CalendarItem';
 import { useInterval } from 'react-use';
+import { useAppConfig } from '../../providers/appConfigProvider';
 
 const ONE_MINUTE_MS = 60 * 1000;
 
-function Calendar({children, timeMin, timeMax, showDate} : {children?: JSX.Element | JSX.Element[], timeMin: Date, timeMax: Date, showDate: boolean}) {
+interface CalendarProps {
+  children?: JSX.Element | JSX.Element[];
+  timeMin: Date;
+  timeMax: Date;
+  showDate: boolean;
+}
+
+function Calendar({children, timeMin, timeMax, showDate} : CalendarProps) {
+  const { calendar: { calendarId } } = useAppConfig();
+
   const calendarRequestParams = useMemo(() => (
     {
       'timeMin': timeMin.toISOString(),
@@ -20,7 +30,7 @@ function Calendar({children, timeMin, timeMax, showDate} : {children?: JSX.Eleme
   ), [timeMin, timeMax]);
 
   const { value, loading, retry } = useGoogleQuery<CalendarData>({
-    url: 'https://www.googleapis.com/calendar/v3/calendars/primary/events',
+    url: `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events`,
     params: calendarRequestParams
   });
 
@@ -31,8 +41,6 @@ function Calendar({children, timeMin, timeMax, showDate} : {children?: JSX.Eleme
     },
     ONE_MINUTE_MS
   );
-
-
 
   if (loading) {
     return (

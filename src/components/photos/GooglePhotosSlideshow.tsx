@@ -7,11 +7,13 @@ import { useTimeoutFn } from "react-use";
 import { MediaSearchResult, toGoogleDate } from "../../google/types";
 import { shuffle } from "../../util/fns";
 import Slideshow from "./Slideshow";
+import { useAppConfig } from "../../providers/appConfigProvider";
 
 const ONE_HOUR_MS = 60 * 60 * 1000;
 
 export default function GooglePhotosSlideshow() {
   const today = useToday();
+  const { photos: { categories } } = useAppConfig();
 
   const photosSearchRequest = useMemo(() => {
     const dateStart = sub(today, {years: 1, months: 1});
@@ -35,18 +37,12 @@ export default function GooglePhotosSlideshow() {
             ]
           },
           contentFilter: {
-            includedContentCategories: [
-              'PEOPLE',
-              'ANIMALS',
-              'HOLIDAYS',
-              'BIRTHDAYS',
-              'SELFIES'
-            ]
+            includedContentCategories: categories
           }
         }
       })
     };
-  }, [today]);
+  }, [today, categories]);
 
   // Search for a list of photos
   const { value: photosList, loading, retry: searchPhotos } = useGoogleQuery<MediaSearchResult>(photosSearchRequest);

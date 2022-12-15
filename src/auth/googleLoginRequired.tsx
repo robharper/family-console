@@ -1,4 +1,4 @@
-import { useRef, useEffect, useMemo } from 'react';
+import { useRef, useEffect, useMemo, useState } from 'react';
 import { useLoadScript } from '../util/useLoadScript';
 import { useLocalStorage } from 'react-use';
 
@@ -21,14 +21,17 @@ interface GoogleLoginRequiredParams {
 
 function GoogleLoginRequired({children, scope} : GoogleLoginRequiredParams) {
   const [tokens, setTokens, clearTokens] = useLocalStorage<GoogleTokens>('tokens');
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Are our tokens about to expire?
-  if (tokens?.refresh_token != null && tokens?.expiry_date != null && Date.now() > tokens?.expiry_date - EXPIRY_BUFFER_MS) {
+  if (!isRefreshing && tokens?.refresh_token != null && tokens?.expiry_date != null && Date.now() > tokens?.expiry_date - EXPIRY_BUFFER_MS) {
     // Token refresh needed
     console.log('Tokens are old, refreshing tokens');
+    setIsRefreshing(true);
     refreshToken(tokens).then(result => setTokens(result)).catch(e => {
       console.error('Error refreshing tokens', e);
       clearTokens();
+      setIsRefreshing(false);
     });
   }
 

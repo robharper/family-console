@@ -10,22 +10,21 @@ export default function Slideshow({images, photoDelay = TEN_SECONDS_MS} : {image
   const [photoIndex, setPhotoIndex] = useState(0);
   const [firstImage, setFirstImage] = useState(true);
 
-  useInterval(
-    () => {
-      setFirstImage(!firstImage);
-      setTimeout(() => {
-        setPhotoIndex((photoIndex + 1) % images.length);
-      }, ONE_SECOND_MS);
-    },
-    photoDelay
-  );
+  const advance = () => {
+    setFirstImage(!firstImage);
+    setTimeout(() => {
+      setPhotoIndex((photoIndex + 1) % images.length);
+    }, ONE_SECOND_MS);
+  };
+
+  useInterval(advance, photoDelay);
 
   const nextIndex = (photoIndex + 1) % images.length;
   const evenIdx = photoIndex % 2 === 0 ? photoIndex : nextIndex;
   const oddIdx = photoIndex % 2 === 1 ? photoIndex : nextIndex;
 
   return (
-    <div className="m-2 rounded-xl overflow-hidden	">
+    <div className="m-2 rounded-xl overflow-hidden" onClick={advance}>
       <div className="relative">
         <SlideshowImage mediaItem={images[evenIdx]} className={
           (firstImage ? 'opacity-100' : 'opacity-0') + ' transition-opacity	duration-1000'
