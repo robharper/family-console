@@ -2,7 +2,6 @@ import { parseISO, format } from "date-fns";
 import { CalendarEvent } from "../../google/types";
 import { useAppConfig } from "../../providers/appConfigProvider";
 
-
 export default function CalendarItem({event, showDate, currentTime} : {event: CalendarEvent, showDate: boolean, currentTime: Date}) {
 
   const { calendar: { highlights } } = useAppConfig();
@@ -34,31 +33,27 @@ export default function CalendarItem({event, showDate, currentTime} : {event: Ca
   const upcomingClasses = !isActive && !isComplete ? 'bg-slate-100' : '';
   const classes = [activeClasses, completeClasses, upcomingClasses].join(' ');
 
-  let title = (<span>{event.summary}</span>);
-  if (highlights) {
-    for (const [term, color] of Object.entries(highlights)) {
-      const summary = event.summary;
-      const re = new RegExp(term, 'ig');
-      if (re.test(summary)) {
-        const parts = summary.split(re);
-        title = (
-          <span>
-            {parts.map((part, index) => {
-              if (index < parts.length - 1)
-                return (<>{part} <em className={`font-bold text-${color}-500`}>{term}</em></>);
-              else return part
-            })}
-          </span>
-        );
-      }
+  const swatches = Object.entries(highlights).map(([term, color]) => {
+    const re = new RegExp(term, 'ig');
+    if (re.test(event.summary)) {
+      return color;
     }
-  }
+    return null;
+  }).filter(Boolean);
 
   return (
-    <li key={event.id} className={classes + ' rounded-xl p-2 mb-2 last:mb-0'}>
-      <p className="text-lg font-medium">{title}</p>
-      <div>
-        {timeString}
+    <li key={event.id} className={classes + ' rounded-xl p-2 mb-2 last:mb-0 flex flex-row'}>
+      <div className="flex-none m-1 w-5">
+        {swatches.map(color => (
+          <span key={color} className={`w-5 h-5 rounded-xl bg-${color} block mb-1`}></span>
+        ))}
+      </div>
+      <div className="flex-1 ml-1">
+        <p className="text-lg font-medium">{event.summary}</p>
+        <div>
+          {timeString}
+        </div>
+        {event.description && <p>{event.description}</p>}
       </div>
     </li>
   )

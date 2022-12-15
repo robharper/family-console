@@ -38,12 +38,12 @@ function App() {
                 </Calendar>
               </div>
               <div className="flex-1 flex flex-col">
-                <div className="flex-1 m-2 min-h-0">
+                <div className="flex-1 m-2 mb-0 min-h-0">
                   <Notes>
                     <h2 className="font-bold">Notes</h2>
                   </Notes>
                 </div>
-                <div className="flex-none">
+                <div className="flex-none m-2">
                   <GooglePhotosSlideshow />
                 </div>
               </div>

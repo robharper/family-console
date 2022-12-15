@@ -1,29 +1,30 @@
 // Auth
 export interface GoogleTokens {
-  access_token: string,
-  expiry_date: number,
-  id_token: string,
-  refresh_token: string,
-  scope: string,
-  token_type: string
+  access_token: string;
+  expiry_date: number;
+  id_token: string;
+  refresh_token: string;
+  scope: string;
+  token_type: string;
 }
 
 export interface GoogleCode {
-  code: string
+  code: string;
 }
 
 
 // Calendar
 export interface CalendarEvent {
-  id: string
-  summary: string
+  id: string;
+  summary: string;
+  description: string;
   start: {
-    date?: string
-    dateTime?: string
+    date?: string;
+    dateTime?: string;
   }
   end: {
-    date?: string
-    dateTime?: string
+    date?: string;
+    dateTime?: string;
   }
 }
 
@@ -36,9 +37,9 @@ export interface MediaItem {
   baseUrl: string;
   filename: string;
   mediaMetadata: {
-    creationTime: string,
-    width: number,
-    height: number
+    creationTime: string;
+    width: number;
+    height: number;
   }
 }
 
