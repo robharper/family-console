@@ -1,17 +1,17 @@
 import { useState } from "react";
-import { useInterval } from "react-use";
+import { useInterval, useTimeoutFn } from "react-use";
 import ArrowsOutIcon from '@heroicons/react/24/solid/ArrowsPointingOutIcon';
 import ArrowsInIcon from '@heroicons/react/24/solid/ArrowsPointingInIcon';
 import SlideshowImage from "./SlideshowImage";
 import { MediaItem } from "../../google/types";
 
-const TEN_SECONDS_MS = 60 * 1000;
+const ONE_MIN_MS = 60 * 1000;
 const ONE_SECOND_MS = 1 * 1000;
 
-export default function Slideshow({images, photoDelay = TEN_SECONDS_MS} : {images: MediaItem[], photoDelay?: number}) {
+export default function Slideshow({images, photoDelay = ONE_MIN_MS} : {images: MediaItem[], photoDelay?: number}) {
   const [visiblePhotoIdx, setVisiblePhotoIdx] = useState(0);
   const [currentPhotoIdx, setCurrentPhotoIdx] = useState(0);
-  const [isFullscreen, setFullscreen] = useState(true);
+  const [isFullscreen, setFullscreen] = useState(false);
 
   const advance = () => {
     // Have to delay preload until animation complete
@@ -19,9 +19,10 @@ export default function Slideshow({images, photoDelay = TEN_SECONDS_MS} : {image
     setTimeout(() => {
       setCurrentPhotoIdx((v) => v + 1);
     }, ONE_SECOND_MS);
+    resetAdvance();
   };
 
-  useInterval(advance, photoDelay);
+  const [,, resetAdvance] = useTimeoutFn(advance, photoDelay);
 
   // Have to keep the imgs in the same place in the DOM to create smooth crossfade animation
   const preloadPhotoIdx = currentPhotoIdx + 1;

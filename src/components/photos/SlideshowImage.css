@@ -1,0 +1,12 @@
+.animate-pan {
+  animation: pan 30s ease-in-out 1s infinite alternate;
+}
+
+@keyframes pan {
+  from {
+    object-position: 50% 20%;
+  }
+  to {
+    object-position: 50% 80%;
+  }
+}
