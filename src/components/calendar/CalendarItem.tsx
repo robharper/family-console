@@ -41,9 +41,13 @@ export default function CalendarItem({event, showDate, currentTime} : {event: Ca
     return null;
   }).filter(Boolean);
 
+  if (swatches.length === 0) {
+    swatches.push('slate-300');
+  }
+
   return (
     <li key={event.id} className={classes + ' rounded-xl p-2 mb-2 last:mb-0 flex flex-row'}>
-      <div className="flex-none m-1 w-5">
+      <div className="flex-none m-1">
         {swatches.map(color => (
           <span key={color} className={`w-5 h-5 rounded-xl bg-${color} block mb-1`}></span>
         ))}
@@ -53,7 +57,7 @@ export default function CalendarItem({event, showDate, currentTime} : {event: Ca
         <div>
           {timeString}
         </div>
-        {event.description && <p>{event.description}</p>}
+        {event.description && <p className="text-sm text-slate-700">{event.description}</p>}
       </div>
     </li>
   )
