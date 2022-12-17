@@ -29,8 +29,8 @@ export default function CalendarItem({event, showDate, currentTime} : {event: Ca
   const isComplete = endTime && currentTime >= endTime;
 
   const activeClasses = isActive ? 'bg-yellow-100' : '';
-  const completeClasses = isComplete ? 'bg-slate-200 text-slate-500' : '';
-  const upcomingClasses = !isActive && !isComplete ? 'bg-slate-100' : '';
+  const completeClasses = isComplete ? 'bg-slate-800 text-slate-500' : '';
+  const upcomingClasses = !isActive && !isComplete ? 'bg-slate-600' : '';
   const classes = [activeClasses, completeClasses, upcomingClasses].join(' ');
 
   const swatches = Object.entries(highlights).map(([term, color]) => {
@@ -42,7 +42,7 @@ export default function CalendarItem({event, showDate, currentTime} : {event: Ca
   }).filter(Boolean);
 
   if (swatches.length === 0) {
-    swatches.push('slate-300');
+    swatches.push('slate-500');
   }
 
   return (
@@ -57,7 +57,7 @@ export default function CalendarItem({event, showDate, currentTime} : {event: Ca
         <div>
           {timeString}
         </div>
-        {event.description && <p className="text-sm text-slate-700">{event.description}</p>}
+        {event.description && <p className="text-sm text-slate-300">{event.description}</p>}
       </div>
     </li>
   )

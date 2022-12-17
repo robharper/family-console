@@ -38,7 +38,7 @@ export default function Notes({children}: {children?: JSX.Element[] | JSX.Elemen
   }
 
   return (
-    <div className="w-full h-full p-2 bg-slate-300 rounded-xl flex flex-col">
+    <div className="w-full h-full p-2 bg-slate-700 rounded-xl flex flex-col">
       <div className="flex-none p-2 mb-2 relative">
         {children}
         <button onClick={clear} className="absolute top-0 right-2 w-6 h-full">
@@ -46,7 +46,7 @@ export default function Notes({children}: {children?: JSX.Element[] | JSX.Elemen
         </button>
       </div>
 
-      <div ref={boundEl} className="flex-1 overflow-auto bg-white rounded-lg text-lg">
+      <div ref={boundEl} className="flex-1 overflow-auto bg-slate-600 rounded-lg text-lg">
         <div ref={quillEl}></div>
       </div>
     </div>

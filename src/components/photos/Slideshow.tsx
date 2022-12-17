@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useInterval, useTimeoutFn } from "react-use";
+import { useGetSet, useTimeoutFn } from "react-use";
 import ArrowsOutIcon from '@heroicons/react/24/solid/ArrowsPointingOutIcon';
 import ArrowsInIcon from '@heroicons/react/24/solid/ArrowsPointingInIcon';
 import SlideshowImage from "./SlideshowImage";
@@ -9,15 +9,16 @@ const ONE_MIN_MS = 60 * 1000;
 const ONE_SECOND_MS = 1 * 1000;
 
 export default function Slideshow({images, photoDelay = ONE_MIN_MS} : {images: MediaItem[], photoDelay?: number}) {
-  const [visiblePhotoIdx, setVisiblePhotoIdx] = useState(0);
+  const [getVisiblePhotoIdx, setVisiblePhotoIdx] = useGetSet(0);
   const [currentPhotoIdx, setCurrentPhotoIdx] = useState(0);
   const [isFullscreen, setFullscreen] = useState(false);
 
   const advance = () => {
-    // Have to delay preload until animation complete
+    // Advance visible to the next image (already preloaded)
     setVisiblePhotoIdx((v) => v + 1);
+    // One second later set "current" to what is now visible, allow preload to move ahead
     setTimeout(() => {
-      setCurrentPhotoIdx((v) => v + 1);
+      setCurrentPhotoIdx(getVisiblePhotoIdx());
     }, ONE_SECOND_MS);
     resetAdvance();
   };
@@ -25,6 +26,7 @@ export default function Slideshow({images, photoDelay = ONE_MIN_MS} : {images: M
   const [,, resetAdvance] = useTimeoutFn(advance, photoDelay);
 
   // Have to keep the imgs in the same place in the DOM to create smooth crossfade animation
+  const visiblePhotoIdx = getVisiblePhotoIdx();
   const preloadPhotoIdx = currentPhotoIdx + 1;
   const evenIdx = currentPhotoIdx % 2 === 0 ? currentPhotoIdx : preloadPhotoIdx;
   const oddIdx = currentPhotoIdx % 2 === 1 ? currentPhotoIdx : preloadPhotoIdx;
@@ -41,7 +43,7 @@ export default function Slideshow({images, photoDelay = ONE_MIN_MS} : {images: M
         `${oddIdx === visiblePhotoIdx ? 'opacity-100' : 'opacity-0'} transition-opacity	duration-1000  absolute top-0 left-0 w-full h-full`
       }></SlideshowImage>
       <button onClick={() => setFullscreen(!isFullscreen)}
-        className={`absolute top-1 right-1 w-6 h-6 opacity-50 rounded-lg ${isFullscreen ? '' : 'bg-white'}`}>
+        className={`absolute top-1 right-1 w-6 h-6 opacity-50 rounded-lg ${isFullscreen ? '' : 'bg-black'}`}>
         {isFullscreen ? <ArrowsInIcon/> : <ArrowsOutIcon/>}
       </button>
     </div>

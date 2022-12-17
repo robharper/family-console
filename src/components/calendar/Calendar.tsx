@@ -49,7 +49,7 @@ function Calendar({children, timeMin, timeMax, showDate} : CalendarProps) {
   }
 
   return (
-    <div className="p-2 m-2 bg-slate-300 rounded-xl">
+    <div className="p-2 m-2 bg-slate-700 rounded-xl">
       <div className="p-2 mb-2 relative">
         {children}
         <button onClick={retry} className="absolute top-0 right-2 w-6 h-full">
@@ -61,7 +61,7 @@ function Calendar({children, timeMin, timeMax, showDate} : CalendarProps) {
         {value?.items?.map(item => (<CalendarItem key={item.id} event={item} showDate={showDate} currentTime={currentTime}></CalendarItem>))}
       </ul>
       {value?.items == null || value?.items?.length === 0 ?
-        <div>No events in period</div> : null
+        <div className="m-2">Nothing... relax...</div> : null
       }
     </div>
   );
