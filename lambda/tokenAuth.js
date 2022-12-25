@@ -30,6 +30,7 @@ async function exchangeCodeForToken({code}) {
     }
   } catch (e) {
     console.error('Exceptions parsing response from exchange', e);
+    throw e;
   }
 }
 
@@ -44,6 +45,7 @@ async function refreshToken({refresh_token}) {
     }
   } catch (e) {
     console.error('Exceptions parsing response from exchange', e);
+    throw e;
   }
 }
 

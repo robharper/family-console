@@ -1,0 +1,9 @@
+{
+  "name": "family-console-lambda",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "dependencies": {
+    "googleapis": "^109.0.1"
+  }
+}
