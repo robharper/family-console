@@ -78,6 +78,6 @@ export default function GooglePhotosSlideshow() {
   }
 
   return (
-    <Slideshow images={randomPhotosList}></Slideshow>
+    <Slideshow images={randomPhotosList} onError={() => searchPhotos()}></Slideshow>
   );
 }

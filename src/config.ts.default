@@ -1,0 +1,28 @@
+import { AppConfig } from "./providers/appConfigProvider";
+
+/**
+ * Configure the console by renaming this file `config.ts` and editing as necessary
+ */
+ const CONFIG: AppConfig = {
+  calendar: {
+    calendarId: "primary",
+    comingUp: {
+      weeks: 2
+    },
+    highlights: {
+      dinner: 'orange-500'
+    },
+    maxItems: 10
+  },
+  photos: {
+    categories: [
+      "PEOPLE",
+      "ANIMALS",
+      "HOLIDAYS",
+      "BIRTHDAYS",
+      "SELFIES"
+    ]
+  }
+};
+
+export default CONFIG;

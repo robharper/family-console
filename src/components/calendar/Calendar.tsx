@@ -14,20 +14,21 @@ interface CalendarProps {
   timeMin: Date;
   timeMax: Date;
   showDate: boolean;
+  maxItems: number;
 }
 
-function Calendar({children, timeMin, timeMax, showDate} : CalendarProps) {
+function Calendar({children, timeMin, timeMax, showDate, maxItems} : CalendarProps) {
   const { calendar: { calendarId } } = useAppConfig();
 
   const calendarRequestParams = useMemo(() => (
     {
       'timeMin': timeMin.toISOString(),
       'timeMax': timeMax.toISOString(),
-      'maxResults': '10',
+      'maxResults': `${maxItems}`,
       'orderBy': 'startTime',
       'singleEvents': 'true'
     }
-  ), [timeMin, timeMax]);
+  ), [timeMin, timeMax, maxItems]);
 
   const { value, loading, retry } = useGoogleQuery<CalendarData>({
     url: `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events`,

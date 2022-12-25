@@ -5,7 +5,7 @@ import { MediaItem } from "../../google/types";
 import './SlideshowImage.css';
 
 
-export default function SlideshowImage({mediaItem, className, contain} : {mediaItem: MediaItem, className: string, contain: boolean}) {
+export default function SlideshowImage({mediaItem, className, contain, onError} : {mediaItem: MediaItem, className: string, contain: boolean, onError: () => void}) {
   const [ref, { width: viewWidth, height: viewHieght }] = useMeasure();
   const refCast = ref as unknown as React.MutableRefObject<HTMLInputElement>;
 
@@ -23,7 +23,9 @@ export default function SlideshowImage({mediaItem, className, contain} : {mediaI
         <img src={`${mediaItem.baseUrl}=w${Math.round(width)}-h${Math.round(height)}`}
           alt={mediaItem.filename} className={
             `rounded-xl w-full h-full ${contain ? 'object-contain' : 'object-cover'} ${height > viewHieght ? 'animate-pan' : '' }`
-          }/>
+          }
+          onError={onError}
+          />
       </div>
       <div className="flex-none text-center font-semibold">{dateStr}</div>
     </div>

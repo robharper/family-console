@@ -5,11 +5,11 @@ import Header from './components/Header';
 import './App.css';
 import { TodayProvider, useToday } from './providers/todayProvider';
 import GooglePhotosSlideshow from './components/photos/GooglePhotosSlideshow';
-import { add, endOfWeek } from 'date-fns/esm';
+import { add } from 'date-fns/esm';
 import Notes from './components/Notes';
-import { AppConfig, AppConfigProvider } from './providers/appConfigProvider';
+import { AppConfigProvider } from './providers/appConfigProvider';
 
-const config = JSON.parse(process.env.REACT_APP_CONFIG ?? '{}') as AppConfig;
+import config from './config';
 
 function App() {
   const today = useToday();
@@ -18,7 +18,7 @@ function App() {
   const todayEnd = add(today, {hours: 23, minutes: 59, seconds: 59});
 
   const thisWeekStart = add(today, {days: 1});
-  const thisWeekEnd = endOfWeek(today);
+  const thisWeekEnd = add(today, config.calendar.comingUp);
 
   return (
     <AppConfigProvider value={config}>
@@ -30,11 +30,11 @@ function App() {
             </div>
             <div className="flex-1 min-h-0 flex flex-row items-stretch h-full">
               <div className="flex-1 overflow-auto">
-                <Calendar timeMin={todayStart} timeMax={todayEnd} showDate={false}>
+                <Calendar timeMin={todayStart} timeMax={todayEnd} showDate={false} maxItems={config.calendar.maxItems}>
                   <h2 className="font-bold">Today</h2>
                 </Calendar>
-                <Calendar timeMin={thisWeekStart} timeMax={thisWeekEnd} showDate={true}>
-                  <h2 className="font-bold">This week</h2>
+                <Calendar timeMin={thisWeekStart} timeMax={thisWeekEnd} showDate={true} maxItems={config.calendar.maxItems}>
+                  <h2 className="font-bold">Coming Up</h2>
                 </Calendar>
               </div>
               <div className="flex-1">

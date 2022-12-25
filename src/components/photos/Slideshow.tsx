@@ -8,7 +8,7 @@ import { MediaItem } from "../../google/types";
 const ONE_MIN_MS = 60 * 1000;
 const ONE_SECOND_MS = 1 * 1000;
 
-export default function Slideshow({images, photoDelay = ONE_MIN_MS} : {images: MediaItem[], photoDelay?: number}) {
+export default function Slideshow({images, onError = () => {}, photoDelay = ONE_MIN_MS} : {images: MediaItem[], onError?: () => void, photoDelay?: number}) {
   const [getVisiblePhotoIdx, setVisiblePhotoIdx] = useGetSet(0);
   const [currentPhotoIdx, setCurrentPhotoIdx] = useState(0);
   const [isFullscreen, setFullscreen] = useState(false);
@@ -38,10 +38,10 @@ export default function Slideshow({images, photoDelay = ONE_MIN_MS} : {images: M
     <div className={containerClasses} onClick={advance}>
       <SlideshowImage mediaItem={images[evenIdx % images.length]} contain={isFullscreen} className={
         `${evenIdx === visiblePhotoIdx ? 'opacity-100' : 'opacity-0'} transition-opacity duration-1000 w-full h-full`
-      }></SlideshowImage>
+      } onError={onError}></SlideshowImage>
       <SlideshowImage mediaItem={images[oddIdx % images.length]} contain={isFullscreen} className={
         `${oddIdx === visiblePhotoIdx ? 'opacity-100' : 'opacity-0'} transition-opacity	duration-1000  absolute top-0 left-0 w-full h-full`
-      }></SlideshowImage>
+      } onError={onError}></SlideshowImage>
       <button onClick={() => setFullscreen(!isFullscreen)}
         className={`absolute top-1 right-1 w-6 h-6 opacity-50 rounded-lg ${isFullscreen ? '' : 'bg-black'}`}>
         {isFullscreen ? <ArrowsInIcon/> : <ArrowsOutIcon/>}
