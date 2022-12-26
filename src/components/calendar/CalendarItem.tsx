@@ -28,10 +28,9 @@ export default function CalendarItem({event, showDate, currentTime} : {event: Ca
   const isActive = startTime && endTime && currentTime >= startTime && currentTime < endTime;
   const isComplete = endTime && currentTime >= endTime;
 
-  const activeClasses = isActive ? 'bg-yellow-100' : '';
-  const completeClasses = isComplete ? 'bg-slate-800 text-slate-500' : '';
-  const upcomingClasses = !isActive && !isComplete ? 'bg-slate-600' : '';
-  const classes = [activeClasses, completeClasses, upcomingClasses].join(' ');
+  const activeClasses = isActive ? 'border-amber-500 border-2 border-solid' : '';
+  const completeClasses = isComplete ? 'bg-slate-800 text-slate-500' : 'bg-slate-600';
+  const classes = [activeClasses, completeClasses].join(' ');
 
   const swatches = Object.entries(highlights).map(([term, color]) => {
     const re = new RegExp(term, 'ig');
