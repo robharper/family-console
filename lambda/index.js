@@ -8,6 +8,8 @@ const handler = async(event) => {
   try {
     body = JSON.parse(event.body);
   } catch (e) {
+    console.error('Error parsing request', event.body);
+    console.error(e);
     return {
       statusCode: 400,
       body: JSON.stringify({
@@ -18,28 +20,24 @@ const handler = async(event) => {
 
   let result;
   let status = 200;
-  switch (body.action) {
-    case 'code':
-      try {
+  try {
+    switch (body.action) {
+      case 'code':
         result = await exchangeCodeForToken(body);
-      } catch (e) {
-        result = {error: e.toString()}
-        status = 400;
-      }
-      break;
-    case 'refresh':
-      try {
+        break;
+      case 'refresh':
         result = await refreshToken(body);
-      } catch (e) {
-        result = {error: e.toString()}
+        break;
+      default:
+        result = {error: `'${body.action}' is not valid`};
         status = 400;
-      }
-      break;
-    default:
-      result = {error: `'${body.action}' is not valid`};
-      status = 400;
+    }
+  } catch (e) {
+    console.error('Error handling request', body);
+    console.error(e);
+    result = {error: e.toString()}
+    status = 400;
   }
-
   const response = {
       statusCode: status,
       body: JSON.stringify(result),
