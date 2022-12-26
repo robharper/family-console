@@ -21,6 +21,16 @@ import { AppConfig } from "./providers/appConfigProvider";
       "HOLIDAYS",
       "BIRTHDAYS",
       "SELFIES"
+    ],
+    ranges: [
+      {
+        start: {years: 1, weeks: 1},
+        end: {years: 0, months: 11, weeks: 3}
+      },
+      {
+        start: {years: 2, weeks: 1},
+        end: {years: 1, months: 11, weeks: 3}
+      }
     ]
   }
 };

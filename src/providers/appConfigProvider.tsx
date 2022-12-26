@@ -1,5 +1,9 @@
 import { createContext, useContext } from "react";
 
+interface PhotoRange {
+  start: Record<string, number>
+  end: Record<string, number>
+}
 export interface AppConfig {
   calendar: {
     // Calendar Id from google, usually something like `<id>@group.calendar.google.com` or `primary`
@@ -12,7 +16,8 @@ export interface AppConfig {
     maxItems: number;
   }
   photos: {
-    categories: string[]
+    categories: string[],
+    ranges: PhotoRange[]
   }
 }
 

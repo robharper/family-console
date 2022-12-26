@@ -3,7 +3,7 @@ import { add, sub } from 'date-fns'
 import { useGoogleQuery } from "../../auth/googleAuthProvider";
 import { useToday } from "../../providers/todayProvider";
 import Loading from "../Loading";
-import { useInterval, useTimeoutFn } from "react-use";
+import { useInterval } from "react-use";
 import { MediaSearchResult, toGoogleDate } from "../../google/types";
 import { shuffle } from "../../util/fns";
 import Slideshow from "./Slideshow";
@@ -13,11 +13,15 @@ const TEN_SEC_MS = 10 * 1000;
 
 export default function GooglePhotosSlideshow() {
   const today = useToday();
-  const { photos: { categories } } = useAppConfig();
+  const { photos: { categories, ranges } } = useAppConfig();
 
   const photosSearchRequest = useMemo(() => {
-    const dateStart = sub(today, {years: 1, months: 1});
-    const dateEnd = add(sub(today, {years: 1}), {months: 1});
+    const rangeRequests = ranges.map(r => (
+      {
+        startDate: toGoogleDate(sub(today, r.start)),
+        endDate: toGoogleDate(sub(today, r.end))
+      }
+    ))
 
     return {
       url: 'https://photoslibrary.googleapis.com/v1/mediaItems:search',
@@ -26,10 +30,7 @@ export default function GooglePhotosSlideshow() {
         pageSize: '100',
         filters: {
           dateFilter: {
-            ranges: [{
-              startDate: toGoogleDate(dateStart),
-              endDate: toGoogleDate(dateEnd),
-            }]
+            ranges: rangeRequests
           },
           mediaTypeFilter: {
             mediaTypes: [
@@ -42,7 +43,7 @@ export default function GooglePhotosSlideshow() {
         }
       })
     };
-  }, [today, categories]);
+  }, [today, categories, ranges]);
 
   // Search for a list of photos
   const { value: photosList, loading, retry: searchPhotos } = useGoogleQuery<MediaSearchResult>(photosSearchRequest);
