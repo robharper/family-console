@@ -9,12 +9,14 @@ This is a fun little project I built to turn an old tablet into a "family consol
 
 <img width="768" alt="image" src="https://user-images.githubusercontent.com/900789/210018083-e7a7410f-08ab-4964-87cf-70d655aebe45.png">
 
+## Running
+Before you can run this app you must create `.env` and `src/config.ts` files. There are `.example` versions of both. You'll need Google API OAuth setup with `http://localhost` as a valid redirect URL. Put your Google client id and secret in the `.env` file. The config file contains the settings for how the app behaves, including the calendar id, the time ranges to show, badge coloring rules, photo selection, etc.
 
 ## Development
 
 In the project directory, you can run:
 
-### `npm start`
+#### `npm start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -22,7 +24,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm run build`
+#### `npm run build`
 
 Builds the app for production to the `build` folder.\
 

@@ -6,15 +6,19 @@ import { AppConfig } from "./providers/appConfigProvider";
  const CONFIG: AppConfig = {
   calendar: {
     calendarId: "primary",
+    // specifies how far ahead to pull "upcoming" calendar events - date-fns "add" syntax
     comingUp: {
       weeks: 2
     },
+    // If a key is found in the calendar event name a badge of the value color will be added.
     highlights: {
       dinner: 'orange-500'
     },
+    // Max calendar items to show
     maxItems: 10
   },
   photos: {
+    // Google photos category tags, used for requesting photos (e.g. stuff you want to see)
     categories: [
       "PEOPLE",
       "ANIMALS",
@@ -22,6 +26,7 @@ import { AppConfig } from "./providers/appConfigProvider";
       "BIRTHDAYS",
       "SELFIES"
     ],
+    // Date ranges of photos to pull, all relative to today using date-fns sub syntax
     ranges: [
       {
         start: {years: 1, weeks: 1},
