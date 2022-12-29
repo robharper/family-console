@@ -7,6 +7,9 @@ This is a fun little project I built to turn an old tablet into a "family consol
 - google photos of specified categories (e.g. `people`) pulled from time ranges relative to today (e.g. this time last year)
 - a basic notepad for passing messages to each other
 
+<img width="768" alt="image" src="https://user-images.githubusercontent.com/900789/210018083-e7a7410f-08ab-4964-87cf-70d655aebe45.png">
+
+
 ## Development
 
 In the project directory, you can run:
