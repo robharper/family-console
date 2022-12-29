@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useGetSet, useTimeoutFn } from "react-use";
+import { useGetSet, useLocalStorage, useTimeoutFn } from "react-use";
 import ArrowsOutIcon from '@heroicons/react/24/solid/ArrowsPointingOutIcon';
 import ArrowsInIcon from '@heroicons/react/24/solid/ArrowsPointingInIcon';
 import SlideshowImage from "./SlideshowImage";
@@ -11,7 +11,8 @@ const ONE_SECOND_MS = 1 * 1000;
 export default function Slideshow({images, onError = () => {}, photoDelay = ONE_MIN_MS} : {images: MediaItem[], onError?: () => void, photoDelay?: number}) {
   const [getVisiblePhotoIdx, setVisiblePhotoIdx] = useGetSet(0);
   const [currentPhotoIdx, setCurrentPhotoIdx] = useState(0);
-  const [isFullscreen, setFullscreen] = useState(false);
+  // Store fullscreen state in localstorage to persist past logout/refresh
+  const [isFullscreen, setFullscreen] = useLocalStorage('is-fullscreen', false);
 
   const advance = () => {
     // Advance visible to the next image (already preloaded)
@@ -36,10 +37,10 @@ export default function Slideshow({images, onError = () => {}, photoDelay = ONE_
 
   return (
     <div className={containerClasses} onClick={advance}>
-      <SlideshowImage mediaItem={images[evenIdx % images.length]} contain={isFullscreen} className={
+      <SlideshowImage mediaItem={images[evenIdx % images.length]} contain={isFullscreen!} className={
         `${evenIdx === visiblePhotoIdx ? 'opacity-100' : 'opacity-0'} transition-opacity duration-1000 w-full h-full`
       } onError={onError}></SlideshowImage>
-      <SlideshowImage mediaItem={images[oddIdx % images.length]} contain={isFullscreen} className={
+      <SlideshowImage mediaItem={images[oddIdx % images.length]} contain={isFullscreen!} className={
         `${oddIdx === visiblePhotoIdx ? 'opacity-100' : 'opacity-0'} transition-opacity	duration-1000  absolute top-0 left-0 w-full h-full`
       } onError={onError}></SlideshowImage>
       <button onClick={() => setFullscreen(!isFullscreen)}

@@ -46,7 +46,7 @@ export default function GooglePhotosSlideshow() {
   }, [today, categories, ranges]);
 
   // Search for a list of photos
-  const { value: photosList, loading, retry: searchPhotos } = useGoogleQuery<MediaSearchResult>(photosSearchRequest);
+  const { value: photosList, loading, error, retry: searchPhotos } = useGoogleQuery<MediaSearchResult>(photosSearchRequest);
 
   // Track renewal of photos results (google photo results expire after 1 hour)
   const [renewTime, setRenewTime] = useState<Date | undefined>();
@@ -72,7 +72,7 @@ export default function GooglePhotosSlideshow() {
       <Loading/>
     );
   }
-  if (photosList == null) {
+  if (error || photosList == null) {
     return (
       <div>Error fetching photos</div>
     )
